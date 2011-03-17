@@ -107,3 +107,6 @@
 [submodule "bundle/vim-preview"]
 	path = bundle/vim-preview
 	url = git://github.com/greyblake/vim-preview.git
+[submodule "bundle/vim-sparkup"]
+	path = bundle/vim-sparkup
+	url = git@github.com:ruprict/vim-sparkup.git

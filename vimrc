@@ -412,3 +412,12 @@ vmap <D-[> <gv
 vmap <D-]> >gv
 
 let ScreenShot = {'Icon':0, 'Credits':0, 'force_background':'#FFFFFF'}
+
+"zen-coding stuff
+let g:user_zen_expandabbr_key = '<c-e>'
+let g:use_zen_complete_tag =1
+
+"blogit
+let blogit_username="ruprict"
+let blogit_password="vcrK7f01"
+let blogit_url="https://ruprict.wordpress.com/xmlrpc.php"
