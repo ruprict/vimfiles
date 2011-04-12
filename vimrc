@@ -315,7 +315,7 @@ inoremap <C-L> <C-O>:nohls<CR>
 nnoremap <leader>b :BufExplorer<cr>
 
 "map to CommandT TextMate style finder
-nnoremap <leader>t :CommandT<CR>
+nnoremap <leader>t :FufFile<CR>
 
 "map Q to something useful
 noremap Q gq
@@ -421,3 +421,6 @@ let g:use_zen_complete_tag =1
 let blogit_username="ruprict"
 let blogit_password="vcrK7f01"
 let blogit_url="https://ruprict.wordpress.com/xmlrpc.php"
+
+"fuzzy-finder
+
