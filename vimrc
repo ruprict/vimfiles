@@ -105,6 +105,9 @@ set guioptions-=T
 "recalculate the trailing whitespace warning when idle, and after saving
 autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
 
+"auto compile coffeescript
+autocmd BufWritePost *.coffee silent CoffeeMake! -b | cwindow
+
 "return '[\s]' if trailing white space is detected
 "return '' otherwise
 function! StatuslineTrailingSpaceWarning()
@@ -209,11 +212,15 @@ function! s:Median(nums)
     endif
 endfunction
 
+" Cool $ at end of change
+set cpoptions+=$
+
 "indent settings
 set shiftwidth=2
 set softtabstop=2
 set expandtab
 set autoindent
+set tabstop=8
 
 "folding settings
 set foldmethod=indent   "fold based on indent
