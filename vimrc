@@ -429,5 +429,6 @@ let blogit_username="ruprict"
 let blogit_password="vcrK7f01"
 let blogit_url="https://ruprict.wordpress.com/xmlrpc.php"
 
-"fuzzy-finder
+"Markdown to HTML  
+nmap <leader>md :%!/usr/local/bin/Markdown.pl --html4tags <cr>  
 
