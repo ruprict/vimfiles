@@ -58,17 +58,13 @@
 	path = bundle/syntastic
 	url = git://github.com/scrooloose/syntastic.git
   ignore = dirty
-[submodule "bundle/Command-T"]
-	path = bundle/Command-T
-	url = git://github.com/akitaonrails/Command-T.git
-  ignore = dirty
 [submodule "bundle/textile"]
 	path = bundle/textile
 	url = git://github.com/timcharper/textile.vim.git
   ignore = dirty
 [submodule "bundle/vim-ruby"]
 	path = bundle/vim-ruby
-	url = git://github.com/vim-ruby/vim-ruby.git
+	url = https://github.com/vim-ruby/vim-ruby.git
   ignore = dirty
 [submodule "bundle/unimpaired"]
 	path = bundle/unimpaired
@@ -125,3 +121,6 @@
 [submodule "bundle/vim-markdown"]
 	path = bundle/vim-markdown
 	url = https://github.com/plasticboy/vim-markdown.git
+[submodule "bundle/autotag"]
+	path = bundle/autotag
+	url = https://github.com/marcus/autotag.vim.git
