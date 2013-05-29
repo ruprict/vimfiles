@@ -11,6 +11,8 @@ set nocompatible
 "allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
+set clipboard=unnamed
+
 "store lots of :cmdline history
 set history=1000
 
@@ -36,6 +38,12 @@ nmap <D-k> gk
 nmap <D-4> g$
 nmap <D-6> g^
 nmap <D-0> g^
+
+map <Leader>rt :call RunCurrentTest()<CR>
+
+map <Leader>rs :call RunNearestSpec()<CR>
+map <Leader>rf :call RunCurrentSpecFile()<CR>
+map <Leader>rl :call RunLastSpec()<CR>
 
 "add some line space for easy reading
 set linespace=4
@@ -63,9 +71,9 @@ set statusline+=%{exists('g:loaded_rvm')?rvm#statusline():''}
 "set statusline+=%*
 
 "Display a warning if file encoding isnt utf-8
-"set statusline+=%#warningmsg#
-"set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
-"set statusline+=%*
+set statusline+=%#warningmsg#
+set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
+set statusline+=%*
 
 "set statusline+=%h      "help file flag
 "set statusline+=%y      "filetype
@@ -106,7 +114,7 @@ set guioptions-=T
 autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
 
 "auto compile coffeescript
-autocmd BufWritePost *.coffee silent CoffeeMake! -b | cwindow
+"autocmd BufWritePost *.coffee silent CoffeeMake! -b | cwindow
 
 "return '[\s]' if trailing white space is detected
 "return '' otherwise
@@ -322,7 +330,7 @@ inoremap <C-L> <C-O>:nohls<CR>
 nnoremap <leader>b :BufExplorer<cr>
 
 "map to CommandT TextMate style finder
-nnoremap <leader>t :FufFile<CR>
+nnoremap <leader>t :FufCoverageFile<CR>
 
 "map Q to something useful
 noremap Q gq
@@ -424,11 +432,113 @@ let ScreenShot = {'Icon':0, 'Credits':0, 'force_background':'#FFFFFF'}
 let g:user_zen_expandabbr_key = '<c-e>'
 let g:use_zen_complete_tag =1
 
-"blogit
-let blogit_username="ruprict"
-let blogit_password="vcrK7f01"
-let blogit_url="https://ruprict.wordpress.com/xmlrpc.php"
 
 "Markdown to HTML  
 nmap <leader>md :%!/usr/local/bin/Markdown.pl --html4tags <cr>  
 
+"Point to right ctags
+let Tlist_Ctags_Cmd='/usr/local/bin/ctags'
+
+"jss syntax
+au BufNewFile,BufRead *.jss set filetype=html
+
+let g:loaded_matchparen = 1
+
+"RVM shell fix
+set shell=/bin/sh
+
+if has("multi_byte")
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
+  set encoding=utf-8                     " better default than latin1
+  setglobal fileencoding=utf-8           " change default file encoding when writing new files
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SWITCH BETWEEN TEST AND PRODUCTION CODE
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! OpenTestAlternate()
+  let new_file = AlternateForCurrentFile()
+  exec ':e ' . new_file
+endfunction
+function! AlternateForCurrentFile()
+  let current_file = expand("%")
+  let new_file = current_file
+  let in_spec = match(current_file, '^spec/') != -1
+  let going_to_spec = !in_spec
+  let in_app = match(current_file, '\<controllers\>') != -1 || match(current_file, '\<models\>') != -1 || match(current_file, '\<views\>') != -1 || match(current_file, '\<helpers\>') != -1 || match(current_file, '\<representers\>') != -1 || match(current_file, '\<repositories\>') != -1 || match(current_file, '\<mailers\>') != -1
+
+  if going_to_spec
+    if in_app
+      let new_file = substitute(new_file, '^app/', '', '')
+    end
+    let new_file = substitute(new_file, '\.rb$', '_spec.rb', '')
+    let new_file = 'spec/' . new_file
+  else
+    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
+    let new_file = substitute(new_file, '^spec/', '', '')
+    if in_app
+      let new_file = 'app/' . new_file
+    end
+  endif
+  return new_file
+endfunction
+nnoremap <leader>. :call OpenTestAlternate()<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Test-running stuff
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! RunCurrentTest()
+  let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|_test.rb\)$') != -1
+  if in_test_file
+    call SetTestFile()
+
+    if match(expand('%'), '\.feature$') != -1
+      call SetTestRunner("!cucumber")
+      exec g:bjo_test_runner g:bjo_test_file
+    elseif match(expand('%'), '_spec\.rb$') != -1
+      call SetTestRunner("!rspec")
+      exec g:bjo_test_runner g:bjo_test_file
+    else
+      call SetTestRunner("!ruby -Itest")
+      exec g:bjo_test_runner g:bjo_test_file
+    endif
+  else
+    exec g:bjo_test_runner g:bjo_test_file
+  endif
+endfunction
+
+function! SetTestRunner(runner)
+  let g:bjo_test_runner=a:runner
+endfunction
+
+function! RunCurrentLineInTest()
+  let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|_test.rb\)$') != -1
+  if in_test_file
+    call SetTestFileWithLine()
+  end
+
+  exec "!rspec" g:bjo_test_file . ":" . g:bjo_test_file_line
+endfunction
+
+function! SetTestFile()
+  let g:bjo_test_file=@%
+endfunction
+
+function! SetTestFileWithLine()
+  let g:bjo_test_file=@%
+  let g:bjo_test_file_line=line(".")
+endfunction
+
+function! CorrectTestRunner()
+  if match(expand('%'), '\.feature$') != -1
+    return "cucumber"
+  elseif match(expand('%'), '_spec\.rb$') != -1
+    return "rspec"
+  else
+    return "ruby"
+  endif
+endfunction
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
