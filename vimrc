@@ -309,13 +309,9 @@ else
     "dont load csapprox if there is no gui support - silences an annoying warning
     let g:CSApprox_loaded = 1
 
-    "set railscasts colorscheme when running vim in gnome terminal
-    if $COLORTERM == 'gnome-terminal'
-        set term=gnome-256color
-        colorscheme habilight
-    else
-        colorscheme default
-    endif
+    syntax enable
+    set background=dark
+    colorscheme railscasts
 endif
 
 " PeepOpen uses <Leader>p as well so you will need to redefine it so something
