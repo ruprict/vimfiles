@@ -311,7 +311,7 @@ else
 
     syntax enable
     set background=dark
-    colorscheme railscasts
+    colorscheme wombat256
 endif
 
 " PeepOpen uses <Leader>p as well so you will need to redefine it so something
@@ -572,4 +572,3 @@ map! <Esc>OQ /
 map! <Esc>OR *
 map! <kPlus> +
 map! <Esc>OS -
-
