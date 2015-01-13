@@ -328,9 +328,6 @@ inoremap <C-L> <C-O>:nohls<CR>
 "map to bufexplorer
 nnoremap <leader>b :BufExplorer<cr>
 
-"map to CommandT TextMate style finder
-nnoremap <leader>t :FufCoverageFile<CR>
-
 "map Q to something useful
 noremap Q gq
 
@@ -477,7 +474,7 @@ function! RunCurrentTest()
       call SetTestRunner("!cucumber")
       exec g:bjo_test_runner g:bjo_test_file
     elseif match(expand('%'), '_spec\.rb$') != -1
-      call SetTestRunner("!rspec")
+      call SetTestRunner("!bundle exec rspec")
       exec g:bjo_test_runner g:bjo_test_file
     else
       call SetTestRunner("!ruby -Itest")
@@ -498,7 +495,7 @@ function! RunCurrentLineInTest()
     call SetTestFileWithLine()
   end
 
-  exec "!rspec" g:bjo_test_file . ":" . g:bjo_test_file_line
+  exec "!bundle exec rspec" g:bjo_test_file . ":" . g:bjo_test_file_line
 endfunction
 
 function! SetTestFile()
@@ -514,7 +511,7 @@ function! CorrectTestRunner()
   if match(expand('%'), '\.feature$') != -1
     return "cucumber"
   elseif match(expand('%'), '_spec\.rb$') != -1
-    return "rspec"
+    return "bundle exec rspec"
   else
     return "ruby"
   endif
