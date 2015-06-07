@@ -549,3 +549,9 @@ map! <Esc>OQ /
 map! <Esc>OR *
 map! <kPlus> +
 map! <Esc>OS -
+
+" Make gitcommits nice and purdy
+autocmd Filetype gitcommit setlocal spell textwidth=72
+
+" Turn on Spell Check for markdown
+autocmd BufRead,BufNewFile *.md setlocal spell
