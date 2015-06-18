@@ -169,3 +169,6 @@
 [submodule "bundle/vim-obsession"]
 	path = bundle/vim-obsession
 	url = https://github.com/tpope/vim-obsession
+[submodule "bundle/emmit-vim"]
+	path = bundle/emmit-vim
+	url = git@github.com:mattn/emmet-vim.git
