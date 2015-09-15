@@ -42,6 +42,8 @@ nmap <D-4> g$
 nmap <D-6> g^
 nmap <D-0> g^
 
+nmap <F8> :TagbarToggle<CR>
+
 map <Leader>rt :call RunCurrentTest()<CR>
 
 map <Leader>rs :call RunNearestSpec()<CR>
@@ -57,6 +59,7 @@ set visualbell t_vb=
 "try to make possible to navigate within lines of wrapped lines
 nmap <Down> gj
 nmap <Up> gk
+
 set fo=l
 
 "statusline setup
@@ -555,3 +558,24 @@ autocmd Filetype gitcommit setlocal spell textwidth=72
 
 " Turn on Spell Check for markdown
 autocmd BufRead,BufNewFile *.md setlocal spell
+
+"enable neocomplete
+let g:neocomplete#enable_at_startup = 1
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplete#close_popup() . "\<CR>"
+    " For no inserting <CR> key.
+      "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() :  "\<Space>"
