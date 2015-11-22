@@ -424,7 +424,8 @@ au BufNewFile,BufRead *.jss set filetype=html
 let g:loaded_matchparen = 1
 
 "RVM shell fix
-set shell=/bin/sh
+"set shell=/bin/sh
+set shell=bash\ -i
 
 if has("multi_byte")
   if &termencoding == ""
@@ -579,3 +580,8 @@ inoremap <expr><C-y>  neocomplete#close_popup()
 inoremap <expr><C-e>  neocomplete#cancel_popup()
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() :  "\<Space>"
+
+" Toggle paste mode so I can paste and keep indention
+nnoremap <F5> :set invpaste paste?<CR>
+imap <F5> <C-O>:set invpaste paste?<CR>
+set pastetoggle=<F5>
