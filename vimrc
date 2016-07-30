@@ -315,6 +315,11 @@ else
     syntax enable
     set background=dark
     colorscheme wombat256
+
+    " Solarized stuff
+    let g:solarized_termtrans = 1
+    set background=dark
+    colorscheme solarized
 endif
 
 " PeepOpen uses <Leader>p as well so you will need to redefine it so something
@@ -562,6 +567,13 @@ autocmd BufRead,BufNewFile *.md setlocal spell
 
 "enable neocomplete
 let g:neocomplete#enable_at_startup = 1
+let g:neocomplcache_disable_auto_complete = 1
+
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : "\<C-x>\<C-u>"
+function! s:check_back_space()"{{{
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1] =~ '\s'
+endfunction"}}
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
@@ -585,3 +597,25 @@ inoremap <expr><C-e>  neocomplete#cancel_popup()
 nnoremap <F5> :set invpaste paste?<CR>
 imap <F5> <C-O>:set invpaste paste?<CR>
 set pastetoggle=<F5>
+
+function! WrapForTmux(s)
+  if !exists('$TMUX')
+    return a:s
+  endif
+
+  let tmux_start = "\<Esc>Ptmux;"
+  let tmux_end = "\<Esc>\\"
+
+  return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
+endfunction
+
+let &t_SI .= WrapForTmux("\<Esc>[?2004h")
+let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
