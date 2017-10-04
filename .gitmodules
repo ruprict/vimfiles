@@ -190,3 +190,6 @@
 [submodule "bundle/neosnippet-snippets"]
 	path = bundle/neosnippet-snippets
 	url = git@github.com:Shougo/neosnippet-snippets.git
+[submodule "bundle/vitality.vim"]
+	path = bundle/vitality.vim
+	url = https://github.com/sjl/vitality.vim.git

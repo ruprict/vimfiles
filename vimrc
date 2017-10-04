@@ -430,7 +430,7 @@ let g:loaded_matchparen = 1
 
 "RVM shell fix
 "set shell=/bin/sh
-set shell=bash\ -i
+set shell=/bin/zsh\ -l
 
 if has("multi_byte")
   if &termencoding == ""
@@ -565,9 +565,6 @@ autocmd Filetype gitcommit setlocal spell textwidth=72
 " Turn on Spell Check for markdown
 autocmd BufRead,BufNewFile *.md setlocal spell
 
-"enable neocomplete
-let g:neocomplete#enable_at_startup = 1
-
 " Toggle paste mode so I can paste and keep indention
 nnoremap <F5> :set invpaste paste?<CR>
 imap <F5> <C-O>:set invpaste paste?<CR>
@@ -614,9 +611,35 @@ endfunction
 autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
 let g:go_fmt_command = "goimports"
 
+"enable neocomplete
+let g:neocomplete#enable_at_startup = 1
+
 " Enable snipMate compatibility feature.
 let g:neosnippet#enable_snipmate_compatibility = 1
 
 " Tell Neosnippet about the other snippets
 let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+
+"vim-markdown is not good at concealing links
+set conceallevel=0
